@@ -8,15 +8,15 @@ class LoginPage extends Page {
     /**
      * define selectors using getter methods
      */
-    get inputUsername () {
+    get Username () {
         return $('#user-name');
     }
 
-    get inputPassword () {
+    get Password () {
         return $('#password');
     }
 
-    get btnSubmit () {
+    get submitButton () {
         return $('input[type="submit"]');
     }
 
@@ -25,9 +25,9 @@ class LoginPage extends Page {
      * e.g. to login using username and password
      */
     async login (username, password) {
-        await this.inputUsername.setValue(username);
-        await this.inputPassword.setValue(password);
-        await this.btnSubmit.click();
+        await this.Username.setValue(username);
+        await this.Password.setValue(password);
+        await this.submitButton.click();
     }
 
     /**
