@@ -24,7 +24,7 @@ describe('Positive Test', () => {
     it('testValid', async () => {
         await LoginPage.open()
         await LoginPage.testLoginAllPositive()
-        await expect((SecurePage.loggedIn).toHaveText(expect.stringContaining('Swag Labs'))
+        await expect((SecurePage.loggedIn).toHaveText(expect.stringContaining('Products'))
             || expect.stringContaining('Epic sadface: Sorry, this user has been locked out.'))
     })
 })
