@@ -1,5 +1,6 @@
-const { $ } = require('@wdio/globals')
+const { $, expect} = require('@wdio/globals')
 const Page = require('./page');
+const url = require("node:url");
 
 /**
  * sub page containing specific selectors and methods for a specific page
@@ -24,6 +25,24 @@ class LoginPage extends Page {
     }
     get Logout(){
         return $('#logout_sidebar_link');
+    }
+    get CartButtons(){
+        return $('[class="btn btn_primary btn_small btn_inventory "]')
+    }
+    get shoppingCart(){
+        return $('[class="shopping_cart_link"]')
+    }
+    get mainPage(){
+        return $('[id="inventory_sidebar_link"]')
+    }
+    get aboutPage(){
+        return $('[id="about_sidebar_link"]')
+    }
+    get resetPage(){
+        return $('[id="reset_sidebar_link"]')
+    }
+    get ShopCartBadge(){
+        return $('[class="shopping_cart_badge"]')
     }
     /**
      * a method to encapsule automation code to interact with the page
@@ -56,10 +75,36 @@ class LoginPage extends Page {
             }
         }
     }
-
+    async addAllToCart() {
+        do {
+            await this.CartButtons.click();
+        }while(await this.CartButtons.isExisting());
+        await expect(this.ShopCartBadge.exists());
+    }
+    async goToCart() {
+        await this.shoppingCart.click();
+        await expect(await browser.getUrl() === "https://www.saucedemo.com/cart.html")
+    }
     open () {
         return super.open();
     }
+    async HamburgerMenuTest(){
+        await this.HamburgerMenu.click();
+        await this.mainPage.click();
+        await expect(await browser.getUrl() === "https://www.saucedemo.com/inventory.html")
+        await this.HamburgerMenu.click();
+        await this.aboutPage.click();
+        await expect(await browser.getUrl() === "https://saucelabs.com/")
+        await this.open();
+        await this.login('standard_user', 'secret_sauce')
+        await this.CartButtons.click();
+        await expect(await this.ShopCartBadge.isExisting());
+        await this.HamburgerMenu.click();
+        await this.resetPage.click();
+        await expect(!await this.ShopCartBadge.isExisting());
+        await this.Logout.click();
+    }
+
 }
 
 module.exports = new LoginPage();
